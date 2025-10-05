@@ -1,0 +1,89 @@
+---
+import "../styles/global.css";
+import Footer from "../components/Footer.astro";
+import { SITE } from "../config.js";
+
+export interface Props {
+	title?: string;
+	description?: string;
+	showScrollToTop?: boolean;
+	canonical?: string;
+}
+
+const {
+	title = SITE.title,
+	description = SITE.description,
+	showScrollToTop = false,
+	canonical = Astro.url.pathname,
+} = Astro.props;
+
+const canonicalURL = new URL(canonical, SITE.url);
+---
+
+<!DOCTYPE html>
+<html lang={SITE.lang}>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>{title}</title>
+		<meta name="description" content={description} />
+
+		<!-- Open Graph -->
+		<meta property="og:type" content="website" />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:url" content={canonicalURL} />
+		<meta property="og:image" content={SITE.image} />
+
+		<!-- Twitter -->
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content={SITE.image} />
+
+		<!-- JSON-LD: Person + WebSite -->
+		<script type="application/ld+json">
+		{`{
+		  "@context": "https://schema.org",
+		  "@type": "Person",
+		  "name": "${SITE.title}",
+		  "url": "${SITE.url}",
+		  "image": "${SITE.image}",
+		  "sameAs": [${Object.values(SOCIAL_LINKS || {}).map(s=>`"${s.url}"`).join(',') }]
+		}`}
+		</script>
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+	</head>
+
+	<body class="bg-white text-black">
+		<div class="max-w-screen-xl mx-auto px-4">
+
+			<main>
+				<slot />
+			</main>
+
+			<Footer />
+		</div>
+
+		{showScrollToTop && (
+			<button
+				onclick="window.scrollTo({top: 0, behavior: 'smooth'})"
+				aria-label="Ir arriba"
+				class="fixed bottom-6 right-6 bg-gray-800 text-white rounded-full w-12 h-12 flex items-center justify-center cursor-pointer shadow-lg hover:bg-gray-600 transition-colors z-50"
+			>
+				<svg
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					viewBox="0 0 24 24"
+					class="w-6 h-6"
+				>
+					<polyline points="18 15 12 9 6 15" />
+				</svg>
+			</button>
+		)}
+	</body>
+</html>
+

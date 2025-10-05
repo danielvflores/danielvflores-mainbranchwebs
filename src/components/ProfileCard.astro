@@ -1,0 +1,31 @@
+---
+import SocialCard from "./SocialCard.astro";
+
+const { src = '/profile.jpg', nameAuthor = 'Daniel Flores Viera', tags = 'Desarrollador Backend • Java • TypeScript • APIs', bio = '', links = undefined } = Astro.props;
+---
+
+<style>
+  @keyframes floatY {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+    100% { transform: translateY(0); }
+  }
+  .float-slow {
+    animation: floatY 4s ease-in-out infinite;
+  }
+</style>
+
+<div class="w-full max-w-sm mx-auto text-center py-24">
+  <div class="bg-white/5 backdrop-blur-sm rounded-2xl p-6 flex flex-col items-center shadow-[0_12px_30px_rgba(2,6,23,0.06),0_-6px_20px_rgba(2,6,23,0.03)] py-6">
+    <div class="rounded-full overflow-hidden w-36 h-36 mb-4 border-4 border-white/20 shadow-md float-slow">
+  <img src={src} alt={`Foto de ${nameAuthor}`} class="w-full h-full object-cover object-center select-none" loading="eager" decoding="async" draggable="false" ondragstart="return false;" style="-webkit-user-drag: none; user-select: none;" onmousedown="if(event.button===0){event.preventDefault(); event.stopPropagation(); return false;}" oncontextmenu="event.preventDefault();" />
+    </div>
+
+    <h1 class="text-2xl font-bold text-black mb-1">{nameAuthor}</h1>
+    <p class="text-sm text-black/50 mb-4">{tags}</p>
+    
+    <SocialCard links={links} />
+
+    <div class="mt-4 text-sm text-black/70">@danielvflores</div>
+  </div>
+</div>

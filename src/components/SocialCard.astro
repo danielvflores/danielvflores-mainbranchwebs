@@ -1,0 +1,62 @@
+---
+import { SOCIAL_LINKS } from "../config";
+
+const { links = SOCIAL_LINKS } = Astro.props;
+
+const normalizedLinks = Array.isArray(links)
+  ? links
+  : links && typeof links === 'object'
+  ? Object.values(links)
+  : [];
+---
+
+<div class="flex flex-col gap-3 w-full">
+  {normalizedLinks.length > 0 && (
+    <div class="mt-4 flex flex-col gap-3">
+      {normalizedLinks.map(link => (
+        <a
+          href={link.url || link.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={link.name || link.label}
+          class="group relative grid grid-cols-[44px_1fr_24px] items-center w-full bg-white rounded-xl p-3 transition-transform duration-300 ease-out hover:-translate-y-1 hover:shadow-[0_20px_50px_rgba(2,6,23,0.12),0_-8px_30px_rgba(2,6,23,0.06)] hover:bg-white/95"
+          style="box-shadow: 0 12px 30px rgba(2,6,23,0.06), 0 -6px 20px rgba(2,6,23,0.03);"
+        >
+          <!-- icon -->
+          {
+
+          }
+          <div class={ `w-11 h-11 flex items-center justify-center rounded-full text-white text-sm font-semibold transform transition-transform duration-300 group-hover:scale-105 overflow-hidden ${(/^https?:\/\//.test(link.icon || '') || /^\//.test(link.icon || '')) ? 'bg-transparent' : 'bg-gray-900'}` }>
+            {(/^https?:\/\//.test(link.icon || '') || /^\//.test(link.icon || '')) ? (
+              <div class="w-full h-full flex items-center justify-center">
+                <img
+                  src={link.icon}
+                  alt={`${link.name || link.label} icon`}
+                  class="w-full h-full object-contain p-1"
+                  loading="lazy"
+                  decoding="async"
+                  onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'"
+                />
+                <span class="hidden w-full h-full items-center justify-center" style="display:none">{link.name ? link.name[0].toUpperCase() : 'L'}</span>
+              </div>
+            ) : (
+              <span>{link.icon ? (link.icon.length <= 2 ? link.icon.toUpperCase() : link.icon[0].toUpperCase()) : (link.name ? link.name[0].toUpperCase() : 'L')}</span>
+            )}
+          </div>
+
+          <!-- centered label -->
+          <div class="text-center text-sm font-medium text-gray-800">{link.name || link.label || link.icon || 'Link'}</div>
+
+          <!-- trailing dots (visual) -->
+          <div class="text-gray-400 opacity-70 flex items-center justify-end">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="opacity-70 transform transition-opacity duration-300 group-hover:opacity-100">
+              <circle cx="12" cy="5" r="1.5"></circle>
+              <circle cx="12" cy="12" r="1.5"></circle>
+              <circle cx="12" cy="19" r="1.5"></circle>
+            </svg>
+          </div>
+        </a>
+      ))}
+    </div>
+  )}
+</div>
